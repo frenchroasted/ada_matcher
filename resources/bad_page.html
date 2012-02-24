@@ -1,0 +1,27 @@
+<html>
+<head>
+	<title>Bad Page</title>
+</head>
+
+<body>
+
+	<!-- img missing alt attribute -->
+	<a href="#" title="Stay here">
+		<img src="someimg.png"/>
+	</a>
+	<br/>
+
+	<!-- link missing title attribute -->
+	<a href="#">
+		<img src="bad.png" alt="this is some alt text"/>
+	</a>
+	<br/>
+
+	<!-- link opens in new window without warning -->
+	<a href="http://www.google.com/" title="another page" target="_blank">
+		Google
+	</a>
+	<br/>
+
+</body>
+</html>
