@@ -42,4 +42,14 @@ describe "AdaMatcher" do
     @browser.should_not meet_ada_requirements(:link_window_warning)
   end
 
+  it "should fail if H2-H4 tags exist without lower-index H tags" do
+    @browser.goto "file://#{@project_base_path}/../resources/bad_page.html"
+    @browser.should_not meet_ada_requirements(:htag_hierarchy)
+  end
+
+  it "should fail if a Form field exists without a corresponding Label" do
+    @browser.goto "file://#{@project_base_path}/../resources/bad_page.html"
+    @browser.should_not meet_ada_requirements(:label_for)
+  end
+
 end
