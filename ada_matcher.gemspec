@@ -8,8 +8,9 @@ Gem::Specification.new do |s|
   s.authors     = ["Aaron Brown"]
   s.email       = ["aaron@thebrownproject.com"]
   s.homepage    = ""
-  s.summary     = %q{TODO: Write a gem summary}
-  s.description = %q{TODO: Write a gem description}
+  s.summary     = %q{Adds custom rspec matchers that test watir Page objects for ADA compliance}
+  s.description = %q{Adds custom rspec matchers that test watir Page objects for ADA compliance}
+  s.license     = 'MIT'
 
   s.rubyforge_project = "ada_matcher"
 
@@ -19,6 +20,8 @@ Gem::Specification.new do |s|
   s.require_paths = ["lib"]
 
   # specify any dependencies here; for example:
-  # s.add_development_dependency "rspec"
-  # s.add_runtime_dependency "rest-client"
+  s.add_development_dependency "rspec"
+  s.add_development_dependency "watir-webdriver", ">0"
+  s.add_development_dependency "headless"
+  s.add_runtime_dependency "rspec"
 end
