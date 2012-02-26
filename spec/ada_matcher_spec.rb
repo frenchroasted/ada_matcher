@@ -24,7 +24,9 @@ describe "AdaMatcher" do
 
   it "should pass ADA compliant page" do
     @browser.goto "file://#{@project_base_path}/../resources/good_page.html"
-    @browser.should meet_ada_requirements(:all)
+    @browser.should meet_ada_requirements
+    # can also say:
+    # @browser.should meet_ada_requirements(:all)
   end
 
   it "should fail with bad image tags" do

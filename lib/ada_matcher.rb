@@ -6,10 +6,10 @@ module AdaMatcher
     @errors = Array.new
 
     match do |page|
-      raise Exception.new("Can only test ADA on Watir::Browser and compatible objects") unless page.class.method_defined?(:h1)
+      raise Exception.new("Can only test ADA on Watir::Browser and compatible objects") unless is_page?(page)
 
       to_run = parse_args(reqs)
-      if (to_run.empty? || to_run.include?(:all)) 
+      if (to_run.empty? || to_run.include?(:all))
         @errors += image_alt(page)
         @errors += link_title(page)
         @errors += link_window_warning(page)
@@ -44,10 +44,27 @@ module AdaMatcher
       "pass the following ADA requirements: #{to_run.inspect}"
     end
 
+    # We don't care what kind of web driver gave us "page" as long as it
+    # responds to all the API calls we need
+    def is_page?(page)
+      page.respond_to?(:images) && 
+        page.respond_to?(:links) && 
+        page.respond_to?(:h1s) &&
+        page.respond_to?(:h2s) &&
+        page.respond_to?(:h3s) &&
+        page.respond_to?(:h4s) &&
+        page.respond_to?(:labels) &&
+        page.respond_to?(:text_fields) &&
+        page.respond_to?(:checkboxes) &&
+        page.respond_to?(:file_fields) &&
+        page.respond_to?(:radios) &&
+        page.respond_to?(:select_lists)
+    end
+
     def parse_args(args)
       return [] if args.nil?
-      if args.class.method_defined? :include
-        args
+      if args.respond_to? :to_a
+        args.to_a
       else
         [args]
       end
