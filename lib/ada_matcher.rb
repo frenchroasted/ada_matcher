@@ -6,25 +6,26 @@ module AdaMatcher
     @errors = Array.new
 
     match do |page|
-      raise Exception.new("Can only test ADA on Watir::Browser and compatible objects") unless is_page?(page)
+      browser = get_page_browser(page)
+      raise Exception.new("Can only test ADA on Watir::Browser and compatible objects (#{browser.class.name})") unless is_browser?(browser)
 
       to_run = parse_args(reqs)
       if (to_run.empty? || to_run.include?(:all))
-        @errors += image_alt(page)
-        @errors += link_title(page)
-        @errors += link_window_warning(page)
-        @errors += htag_hierarchy(page)
-        @errors += label_for(page)
+        @errors += image_alt(browser)
+        @errors += link_title(browser)
+        @errors += link_window_warning(browser)
+        @errors += htag_hierarchy(browser)
+        @errors += label_for(browser)
       elsif to_run.include?(:image_alt)
-        @errors += image_alt(page)
+        @errors += image_alt(browser)
       elsif to_run.include?(:link_title)
-        @errors += link_title(page)
+        @errors += link_title(browser)
       elsif to_run.include?(:link_window_warning)
-        @errors += link_window_warning(page)
+        @errors += link_window_warning(browser)
       elsif to_run.include?(:htag_hierarchy)
-        @errors += htag_hierarchy(page)
+        @errors += htag_hierarchy(browser)
       elsif to_run.include?(:label_for)
-        @errors += label_for(page)
+        @errors += label_for(browser)
       end
 
       !(@errors.nil?) && (@errors.length == 0)
@@ -44,21 +45,31 @@ module AdaMatcher
       "pass the following ADA requirements: #{to_run.inspect}"
     end
 
+    def get_page_browser(page)
+      # "page" may be a browser object or, for example, a watir_page_helper object
+      # with a "browser" object embedded within it. Find the nested browser object
+      # and return it so we can continue in a consistent manner.
+      return page.browser if page.respond_to?(:browser)
+      return page.browser if page.instance_variable_defined?(:@browser)
+      return page.browser if page.instance_variable_defined?(:browser)
+      page
+    end
+
     # We don't care what kind of web driver gave us "page" as long as it
     # responds to all the API calls we need
-    def is_page?(page)
-      page.respond_to?(:images) && 
-        page.respond_to?(:links) && 
-        page.respond_to?(:h1s) &&
-        page.respond_to?(:h2s) &&
-        page.respond_to?(:h3s) &&
-        page.respond_to?(:h4s) &&
-        page.respond_to?(:labels) &&
-        page.respond_to?(:text_fields) &&
-        page.respond_to?(:checkboxes) &&
-        page.respond_to?(:file_fields) &&
-        page.respond_to?(:radios) &&
-        page.respond_to?(:select_lists)
+    def is_browser?(browser)
+      browser.respond_to?(:images) && 
+        browser.respond_to?(:links) && 
+        browser.respond_to?(:h1s) &&
+        browser.respond_to?(:h2s) &&
+        browser.respond_to?(:h3s) &&
+        browser.respond_to?(:h4s) &&
+        browser.respond_to?(:labels) &&
+        browser.respond_to?(:text_fields) &&
+        browser.respond_to?(:checkboxes) &&
+        browser.respond_to?(:file_fields) &&
+        browser.respond_to?(:radios) &&
+        browser.respond_to?(:select_lists)
     end
 
     def parse_args(args)

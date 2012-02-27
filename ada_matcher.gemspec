@@ -23,5 +23,5 @@ Gem::Specification.new do |s|
   s.add_development_dependency "rspec"
   s.add_development_dependency "watir-webdriver", ">0"
   s.add_development_dependency "headless"
-  s.add_runtime_dependency "rspec"
+#  s.add_runtime_dependency "rspec"
 end
