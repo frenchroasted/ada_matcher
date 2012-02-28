@@ -7,7 +7,7 @@ Gem::Specification.new do |s|
   s.version     = AdaMatcher::VERSION
   s.authors     = ["Aaron Brown"]
   s.email       = ["aaron@thebrownproject.com"]
-  s.homepage    = ""
+  s.homepage    = "https://github.com/frenchroasted/ada_matcher"
   s.summary     = %q{Adds custom rspec matchers that test watir Page objects for ADA compliance}
   s.description = %q{Adds custom rspec matchers that test watir Page objects for ADA compliance}
   s.license     = 'MIT'
