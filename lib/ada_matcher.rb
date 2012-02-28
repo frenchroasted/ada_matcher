@@ -84,7 +84,8 @@ module AdaMatcher
     def image_alt(page)
       e = Array.new
       page.images.each do |img|
-        e << "Image tag is missing 'alt' attribute: #{img.html}" if img.alt.empty?
+        # alt="" is okay - image may be merely decorative.
+        e << "Image tag is missing 'alt' attribute: #{img.html}" unless (img.html =~ /\s+alt\s*=\s*([\'\"])\1/ || !img.alt.empty?)
       end
       e  # return error message array
     end
@@ -130,10 +131,14 @@ module AdaMatcher
       end
 
       (page.text_fields.to_a + page.checkboxes.to_a + page.file_fields.to_a + page.radios.to_a + page.select_lists.to_a).each do |fld|
-        if fld.id.nil? || fld.id.to_s.empty?
-          e << "Form field without an ID or a corresponding Label: #{fld.html}"
-        else
-          e << "Form field without a corresponding Label: #{fld.html}" unless fors.has_key? fld.id.to_s.to_sym
+        # Form field with title does not necessarily require a Label
+        # http://www.w3.org/TR/2012/NOTE-WCAG20-TECHS-20120103/H65
+        if fld.title.empty?
+          if (fld.id.nil? || fld.id.to_s.empty?)
+            e << "Form field without an ID, a corresponding Label, or a Title: #{fld.html}"
+          else
+            e << "Form field without a corresponding Label or a Title: #{fld.html}" unless fors.has_key? fld.id.to_s.to_sym
+          end
         end
       end
 
