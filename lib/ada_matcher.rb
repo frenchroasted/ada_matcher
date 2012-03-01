@@ -108,16 +108,25 @@ module AdaMatcher
       e  # return error message array
     end
 
+    # Currently, no method exists to collect all Heading tags (H1 - H6).
+    # We scan all tags on the page and evaluate their order for proper
+    # hierarchical sequencing.
     def htag_hierarchy(page)
       e = Array.new
-      if page.h1s.to_a.empty? && !page.h2s.to_a.empty?
-          e << "H2 tag found but no H1 found on page"
-      end
-      if page.h2s.to_a.empty? && !page.h3s.to_a.empty?
-          e << "H3 tag found but no H2 found on page"
-      end
-      if page.h3s.to_a.empty? && !page.h4s.to_a.empty?
-          e << "H4 tag found but no H3 found on page"
+      page_tags = page.elements.to_a.collect {|e| e.tag_name}
+
+      last_htag_num = 0
+      for i in 0..(page_tags.size - 1)
+        if hMatch = /^h([1-6])$/.match(page_tags[i])
+          headingIdx = hMatch[1].to_i
+          if (last_htag_num > 0) && (headingIdx > (last_htag_num + 1))
+            e << "H#{headingIdx} tag found, but prior Heading tag was H#{last_htag_num}."
+          elsif headingIdx > (last_htag_num + 1)
+            e << "H#{headingIdx} tag found, but no prior higher level Heading tag was found."
+          else
+            last_htag_num = headingIdx
+          end
+        end
       end
 
       e  # return error message array
