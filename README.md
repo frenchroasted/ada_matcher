@@ -11,6 +11,7 @@ problems.
 What this code can do
 ---------------------
 The Matcher will scan HTML and evaluate these ADA/accessibility points:
+
 *  Image tags should include alt text (see Notes below)
 
 *  Link tags should include explanatory titles
@@ -93,7 +94,7 @@ some optional arguments:
 
 * `meet_ada_requirements(:all)` = run all ADA checks
 
-* `meet_ada_requirements(:some_specific_test_name])` = run just one ADA check
+* `meet_ada_requirements(:some_specific_test_name)` = run just one ADA check
 
 * `meet_ada_requirements([:one_test, :another_test, :a_third_test])` = run several specific checks
 
