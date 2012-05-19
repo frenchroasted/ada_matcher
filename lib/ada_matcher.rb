@@ -113,7 +113,7 @@ module AdaMatcher
     # hierarchical sequencing.
     def htag_hierarchy(page)
       e = Array.new
-      page_tags = page.elements.to_a.collect {|e| e.tag_name}
+      page_tags = page.elements.to_a.collect {|elem| elem.tag_name}
 
       last_htag_num = 0
       for i in 0..(page_tags.size - 1)
